@@ -1,0 +1,8 @@
+.efec{
+        transition: transform 1s ease-out;
+}
+.efec:hover{
+        transform: scale(1.01); 
+        transition: transform 1s ease-out;
+        margin-bottom: 20px;
+}
