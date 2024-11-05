@@ -44,12 +44,21 @@ export default function PostListEditor() {
   }
 
   const startEditing = (post) => {
-    setEditingPost(post);
+    // Ensure post has a valid id
+    if (post && post.id) {
+      setEditingPost(post);
+    } else {
+      console.error('Invalid post data:', post);
+    }
   }
 
   const cancelEditing = () => setEditingPost(null)
 
   const savePost = async (post) => {
+    if (!post.id) {
+      console.error('Post ID is undefined!');
+      return;
+    }
     await editPost(token, post.id, post)
     setEditingPost(null)
     const tok = sessionStorage.getItem("token")
@@ -57,7 +66,7 @@ export default function PostListEditor() {
   }
 
   const handleDelete = async (post) => {
-    if (post) {
+    if (post && post.id) {
       await deletePost(token, post.id);
       const tok = sessionStorage.getItem("token")
       cancelEditing(); 
@@ -180,6 +189,11 @@ function PostEditModal({ post, onSave, onCancel, onDelete }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!post.id) {
+      console.error('Post ID is undefined!');
+      return;
+    }
+
     const updatedPost = {
       id: post.id,
       title,
@@ -188,6 +202,7 @@ function PostEditModal({ post, onSave, onCancel, onDelete }) {
       author,
       content,
     };
+
     await onSave(updatedPost);
   };
 
@@ -253,7 +268,7 @@ function PostEditModal({ post, onSave, onCancel, onDelete }) {
             <Button type="submit">
               <Save className="mr-2 h-4 w-4" /> Guardar
             </Button>
-            <Button type="button" variant="destructive" onClick={onDelete}>
+            <Button type="button" variant="destructive" onClick={() => onDelete(post)}>
               <X className="mr-2 h-4 w-4" /> Eliminar
             </Button>
           </DialogFooter>
@@ -269,14 +284,12 @@ function PostAddModal({ open, onClose, onAdd }) {
   const [image, setImage] = useState('');
   const [author, setAuthor] = useState('CAPROLUZ');
   const [content, setContent] = useState('');
-  const [previewUrl, setPreviewUrl] = useState('');
 
   const handleImageChange = async (e) => {
     const file = e.target.files?.[0];
     if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
       const base64String = await fileToBase64(file);
       setImage(base64String);
-      setPreviewUrl(URL.createObjectURL(file)); 
     } else {
       alert("Por favor, selecciona una imagen en formato JPEG o PNG.");
     }
@@ -292,13 +305,6 @@ function PostAddModal({ open, onClose, onAdd }) {
       content,
     };
     await onAdd(newPost);
-    // Reset fields after adding
-    setTitle('');
-    setDescription('');
-    setImage('');
-    setAuthor('CAPROLUZ');
-    setContent('');
-    setPreviewUrl('');
   };
 
   return (
@@ -355,21 +361,13 @@ function PostAddModal({ open, onClose, onAdd }) {
               accept=".jpg,.jpeg,.png"
               onChange={handleImageChange}
             />
-            {previewUrl && (
-              <Image
-                src={previewUrl}
-                alt="Vista previa"
-                width={300}
-                height={300} 
-              />
-            )}
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={onClose}>
               <X className="mr-2 h-4 w-4" /> Cancelar
             </Button>
             <Button type="submit">
-              <Save className="mr-2 h-4 w-4" /> Agregar
+              <Save className="mr-2 h-4 w-4" /> Guardar
             </Button>
           </DialogFooter>
         </form>
