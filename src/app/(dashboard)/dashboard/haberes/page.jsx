@@ -65,7 +65,6 @@ export default function Haberes() {
               <th role="columnheader">Disponibilidad</th>
               <th role="columnheader">50%</th>
               <th role="columnheader">Total Embargos</th>
-              <th role="columnheader">Total Fianzas</th>
               <th role="columnheader">Saldo Final</th>
             </tr>
           </thead>
@@ -83,9 +82,6 @@ export default function Haberes() {
                 </td>
                 <td data-label="Total Embargos" role="cell">
                   {haberesData[0].Total_Embargos?.toFixed(2)}
-                </td>
-                <td data-label="Total Fianzas" role="cell">
-                  {haberesData[0].Total_Fianzas?.toFixed(2)}
                 </td>
                 <td data-label="Saldo Final" role="cell">
                   {haberesData[0].Saldo_Final?.toFixed(2)}
