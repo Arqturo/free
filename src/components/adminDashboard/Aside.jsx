@@ -11,9 +11,6 @@ export default function Aside() {
           { icon: FileText, label: "Usuarios registrados", link: "/admin/dashboard/users" }
         //  { icon: PlusCircle, label: "Administradores",link: "/admin/dashboard/admins" }
         ] },
-        { icon: NotebookPen, label: "Noticias", subItems: [
-          { icon: FileText, label: "Todas las noticias", link: "/admin/dashboard/listpost" },
-        ] },
         { icon: Settings, label: "Configuración" , link: "/admin/dashboard/users" },
       ]
   return (
