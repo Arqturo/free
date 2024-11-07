@@ -4,8 +4,6 @@ import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import ModalPassword from "./ModalPassword";
 import Swal from 'sweetalert2';  
-require('dotenv').config();
-const apiUrl = process.env.NEXT_PUBLIC_APP_API_URL;
 
 function Page() {
   const router = useRouter();
@@ -22,7 +20,8 @@ function Page() {
       password: password
     };
 
-    const response = await fetch(apiUrl + '/login/', {
+    // Call the server-side login API route
+    const response = await fetch('/api/user/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -36,11 +35,10 @@ function Page() {
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Correo o contraseña inválida',
+        text: data.error || 'Correo o contraseña inválida',
         confirmButtonText: 'Aceptar'
       });
     } else {
-      // Save the token to sessionStorage as token2
       sessionStorage.setItem('token2', data.token); 
       router.push('/dashboard');
     }
@@ -148,3 +146,14 @@ function Page() {
 }
 
 export default Page;
+
+
+
+
+
+
+
+
+
+
+

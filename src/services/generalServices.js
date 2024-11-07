@@ -70,6 +70,8 @@ export function fileToBase64(file) {
     });
   }
   
+
+  
   export function base64ToFile(base64String, fileName) {
     if (!base64String || !base64String.includes(',')) {
       throw new Error('Invalid Base64 string');

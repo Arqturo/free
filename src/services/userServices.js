@@ -1,7 +1,7 @@
 require('dotenv').config();
 const apiUrl = process.env.NEXT_PUBLIC_APP_API_URL;
 
-const handleUnauthorized = () => {
+export const handleUnauthorized = () => {
     document.cookie.split(";").forEach((c) => {
        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
     });
@@ -19,8 +19,7 @@ export function getProfile(token) {
         });
 
         if (response.status === 401) {
-            handleUnauthorized();
-            return;
+            return { error: 'Unauthorized' }; 
         }
 
         const data = await response.json();
@@ -41,8 +40,7 @@ export function getUserLoans(token) {
         });
 
         if (response.status === 401) {
-            handleUnauthorized();
-            return;
+            return { error: 'Unauthorized' };
         }
 
         const data = await response.json();
@@ -53,26 +51,30 @@ export function getUserLoans(token) {
 }
 
 export function getHaberes(token) {
+  
     async function queryHaberes() {
-        const response = await fetch(`${apiUrl}/user/haberes/`, {
-            method: "GET",
-            headers: {
-                'Authorization': `Token ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (response.status === 401) {
-            handleUnauthorized();
-            return;
-        }
-
-        const data = await response.json();
-        return data;
+      const response = await fetch(`${apiUrl}/user/haberes/`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Token ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (response.status === 401) {
+        return { error: 'Unauthorized' };
+      }
+  
+      if (!response.ok) {
+        return { error: 'Failed to fetch data' };  
+      }
+  
+      const data = await response.json();
+      return data;
     }
-
+  
     return queryHaberes();
-}
+  }
 
 export function getFianza(token) {
     async function queryFianza() {
@@ -85,8 +87,7 @@ export function getFianza(token) {
         });
 
         if (response.status === 401) {
-            handleUnauthorized();
-            return;
+            return { error: 'Unauthorized' };
         }
 
         const data = await response.json();
@@ -96,30 +97,30 @@ export function getFianza(token) {
     return queryFianza();
 }
 
-export function updateProfile(token, data) {
-    async function queryUpdateProfile() {
+export async function updateProfile(token, data) {
+    try {
         const response = await fetch(`${apiUrl}/profile/edit/`, {
-            method: "PUT",
+            method: 'PUT',
             headers: {
                 'Authorization': `Token ${token}`,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
 
         if (response.status === 401) {
-            handleUnauthorized();
-            return;
+            return { error: 'Unauthorized' }; 
         }
 
         if (response.ok) {
             const updatedData = await response.json();
-            return updatedData;
+            return updatedData; 
         }
 
         const error = await response.json();
-        throw new Error(error.message || "Failed to update profile");
+        throw new Error(error.message || 'Failed to update profile'); 
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        return { error: error.message || 'Unknown error occurred while updating profile' };
     }
-
-    return queryUpdateProfile();
 }

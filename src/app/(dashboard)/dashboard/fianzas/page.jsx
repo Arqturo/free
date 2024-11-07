@@ -1,16 +1,15 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { getFianza } from '@/services/userServices'; // Adjust the import path as necessary
+import { handleUnauthorized } from '@/services/userServices';
 
 export default function Fianzas() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [fianzaData, setFianzaData] = useState([]); // State to hold fianza data
-  const [token, setToken] = useState(null); // Use state to manage token
+  const [fianzaData, setFianzaData] = useState([]);
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
-    // Retrieve token from sessionStorage once the component mounts
     const storedToken = sessionStorage.getItem('token2');
     if (storedToken) {
       setToken(storedToken);
@@ -19,8 +18,24 @@ export default function Fianzas() {
     const fetchFianzaData = async () => {
       if (storedToken) {
         try {
-          const data = await getFianza(storedToken);
-          setFianzaData(data); // Store fetched data
+          const response = await fetch('/api/user/getFianza', {
+            method: 'GET',
+            headers: {
+              'Authorization': `Token ${storedToken}`,
+            },
+          });
+
+          if (!response.ok) {
+            if (response.status === 401) {
+              handleUnauthorized();
+            } else {
+              setError('Failed to fetch fianzas data');
+            }
+            return;
+          }
+
+          const data = await response.json();
+          setFianzaData(data);
         } catch (err) {
           setError(err.message);
         } finally {
@@ -46,7 +61,7 @@ export default function Fianzas() {
   return (
     <div className='user_box'>
       {fianzaData.length === 0 ? (
-        <div>No hay ningún estado de Fianzas</div> // Message when there are no records
+        <div>No hay ningún estado de Fianzas</div>
       ) : (
         <table role="table" className='user_box_table'>
           <thead role="rowgroup">

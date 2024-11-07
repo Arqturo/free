@@ -4,8 +4,7 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import ModalError from './ModalError';
 import ModalSucces from "./ModalSucces"
-require('dotenv').config();
-const apiUrl = process.env.NEXT_PUBLIC_APP_API_URL;
+
 
 export default function Page() {
   const [errorMessage, setErrorMessage] = useState('');
@@ -15,7 +14,7 @@ export default function Page() {
 
   async function register(dataToSend) {
     try {
-      const response = await fetch(apiUrl + '/register/', {
+      const response = await fetch('/api/user/register', {  
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -26,6 +25,7 @@ export default function Page() {
       const data = await response.json();
       console.log(data);
 
+      // Handling different response cases
       if (data.error) {
         setErrorMessage("Usted no se encuentra inscrito en la caja de ahorro");
       } else if (data.cedula) {
@@ -33,13 +33,13 @@ export default function Page() {
       } else if (data.email) {
         setErrorMessage("El correo ya está asociado a una cuenta en el sistema");
       } else {
-        setIsSucces(true);
+        setIsSucces(true);  
       }
     } catch (error) {
       console.error('Error de servidor:', error);
       setErrorMessage("Ocurrió un error al comunicarse con el servidor. Por favor, inténtelo más tarde.");
     } finally {
-      setIsLoading(false); // Finalizar el estado de carga
+      setIsLoading(false);  
     }
   }
 
@@ -65,119 +65,12 @@ export default function Page() {
     };
 
     if (password === Rpassword) {
-      register(dataToSend);
+      register(dataToSend);  
     } else {
       setErrorMessage("Las claves no coinciden, vuelva a introducirla.");
       setIsLoading(false);
     }
   }
-
-    // async function register(dataToSend) {
-      
-    //   try {
-    //       const response = await fetch($apiUrl+'/register', {
-    //           method: 'POST',
-    //           headers: {
-    //               'Content-Type': 'application/json'
-    //           },
-    //           body: JSON.stringify(dataToSend)
-    //       });
-
-    //       Verificar si la respuesta es exitosa
-    //       if (!response.ok) {
-    //         throw new Error(`Error`);
-    //       }
-
-    //       const data = await response.json();
-    //       console.log(data);
-    //       console.log(response);
-          
-          
-
-    //           if (data.error) {
-    //               setErrorMessage("No está registrado en la caja de ahorro");
-    //           } else if (data.cedula) {
-    //               setErrorMessage("Usted ya se encuentra registrado");
-    //           } else if (data.email) {
-    //               setErrorMessage("El correo ya está asociado a una cuenta");
-    //           } else {
-    //               alert("Registro exitoso");
-    //               router.push('/auth/signin');
-    //           }
-              
-    //       } catch (error) {
-    //           console.error('Error de servidor:', error);
-    //       }finally {
-    //         setIsLoading(false); // Finalizar el estado de carga
-    //       }
-    //  }
-
-  //  function registerSubmit(e){
-
-  //     e.preventDefault();
-  //     let err = false
-
-  //     const cedula = document.getElementById('cedula').value;
-  //     const fullname = document.getElementById('fullname').value;
-  //     const email = document.getElementById('email').value;
-  //     const password = document.getElementById('password').value;
-  //     const Rpassword = document.getElementById('Rpassword').value;
-  //     const prefix_phone = document.getElementById('prefix').value;
-  //     const phone = document.getElementById('phone').value;
-
-  //     const dataToSend = {
-  //         cedula:cedula,
-  //         // fullname: fullname,
-  //         email: email,
-  //         password: password,
-  //         phone_number:prefix_phone.toString() + phone.toString()
-  //     };
-  //     if (password === Rpassword){
-
-  //         async function register() {
-
-  //            try {
-  //             const response = await fetch($apiUrl+'/register' , {
-  //                    method: 'POST',
-  //                    headers: {
-  //                        'Content-Type': 'application/json'
-  //                   },
-  //                    body: JSON.stringify(dataToSend)
-  //                })
-
-
-  //                const data = await response.json();              
-
-  //                console.log(data);
-                 
-  //               if(data.error ){
-  //                   alert("No esta registrado en la caja de ahorro")
-  //               }else if(data.cedula){
-  //                 alert("Usted ya se encuentra registrado");
-  //               }else if(data.email){
-  //                 alert("El correo ya esta asociado a una cuenta")
-  //               }
-  //               else{
-  //                 alert("Registro exitoso")
-  //                 router.push('/auth/signin');
-  //               } 
-                
-  //             } catch (error) {
-  //               console.error('Error:', error);
-  //               setErrorMessage("Ocurrió un error al comunicarse con el servidor. Por favor, inténtelo más tarde.");
-  //           }
-                 
-  //         }
-  //         register()
-
-  //     }else{
-  //       err = true;
-  //       setErrorMessage("Las contraseñas no coinciden.");
-  //     }
-
-      
-  // }
-  
 
   return (
     <main className="flex w-full justify-center font-poppins items-center bg-gradient-to-r from-slate-200 to-gray-300">

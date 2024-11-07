@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { getProfile, updateProfile } from '@/services/userServices'; // Adjust the import path as necessary
+import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import './Perfil.css'; // Import the CSS file
+import { handleUnauthorized } from '@/services/userServices'; // Import the function
 
 export default function Perfil() {
   const [loading, setLoading] = useState(true);
@@ -12,6 +12,7 @@ export default function Perfil() {
   const [token, setToken] = useState(null);
 
   useEffect(() => {
+    // Retrieve token from sessionStorage
     const storedToken = sessionStorage.getItem('token2');
     if (storedToken) {
       setToken(storedToken);
@@ -20,18 +21,38 @@ export default function Perfil() {
     const fetchProfileData = async () => {
       if (storedToken) {
         try {
-          const data = await getProfile(storedToken);
-          setProfileData(data);
-          setFormData({
-            email: data.email,
-            phone_number: data.phone_number,
-            full_name: data.full_name,
+          // Call the API route /api/user/getProfile to fetch profile data
+          const response = await fetch('/api/user/getProfile', {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${storedToken}`,
+            },
           });
+
+          if (response.ok) {
+            const data = await response.json();
+            setProfileData(data);
+            setFormData({
+              email: data.email,
+              phone_number: data.phone_number,
+              full_name: data.full_name,
+            });
+          } else if (response.status === 401) {
+            // If a 401 error occurs, call handleUnauthorized function
+            handleUnauthorized();
+          } else {
+            const error = await response.json();
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: error.message || 'No se pudo cargar los datos del perfil.',
+            });
+          }
         } catch (err) {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: err.message,
+            text: err.message || 'Hubo un error al cargar el perfil.',
           });
         } finally {
           setLoading(false);
@@ -40,14 +61,14 @@ export default function Perfil() {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'No se encontró el token',
+          text: 'No se encontró el token.',
         });
         setLoading(false);
       }
     };
 
     fetchProfileData();
-  }, []);
+  }, []); // Empty dependency array ensures this runs once when the component mounts
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,22 +77,47 @@ export default function Perfil() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (token) {
-      try {
-        await updateProfile(token, formData);
+    if (!token) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se encontró el token.',
+      });
+      return;
+    }
+
+    try {
+      // Call the API route /api/user/updateProfile to update the profile
+      const response = await fetch('/api/user/updateProfile', {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const updatedData = await response.json();
         Swal.fire({
           icon: 'success',
           title: 'Éxito',
           text: 'Perfil actualizado con éxito!',
         });
         setProfileData({ ...profileData, ...formData });
-      } catch (err) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error, correo o cedula no unicos',
-          text: err.message,
-        });
+      } else if (response.status === 401) {
+        // If a 401 error occurs, call handleUnauthorized function
+        handleUnauthorized();
+      } else {
+        const error = await response.json();
+        throw new Error(error.message || 'Error al actualizar el perfil');
       }
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al actualizar perfil',
+        text: err.message || 'Algo salió mal.',
+      });
     }
   };
 

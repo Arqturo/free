@@ -1,14 +1,9 @@
 "use client"
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useParams, usePathname } from 'next/navigation';
+import React, { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import ModalError from '../../../signup/ModalError';
 import Link from 'next/link';
-require('dotenv').config();
-const apiUrl = process.env.NEXT_PUBLIC_APP_API_URL;
 
-export default function PasswordReset({ params }) {
+export default function PasswordReset() {
   const [passwordMismatch, setPasswordMismatch] = useState(false);
   const [control, setControl] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
@@ -17,41 +12,38 @@ export default function PasswordReset({ params }) {
   const uid = searchParams.get('uid');
   const token = searchParams.get('token');
 
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault();
     const password = document.getElementById('Npassword').value;
     const Rpassword = document.getElementById('RNpassword').value;
 
     if (password === Rpassword) {
-      const new_password = document.getElementById('Npassword').value;
+      const new_password = password;
 
       setPasswordMismatch(false);
       const dataSend = {
-        uid: uid,
-        token: token,
-        new_password: new_password           
+        uid,
+        token,
+        new_password
       };
 
-      async function submit2() {
-        const response = await fetch(apiUrl + '/password_reset_confirm/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(dataSend)
-        });
+      const response = await fetch('/api/user/password-reset-confirm', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dataSend)
+      });
 
-        const data = await response.json();
+      const data = await response.json();
 
-        if (data.error) {
-          setErrorMessage("Error al cambiar la contraseña, vuelva a solicitar un nuevo codigo");
-        } else {
-          setControl(true);
-        }
+      if (data.error) {
+        setErrorMessage(data.error);
+      } else {
+        setControl(true);
       }
-      submit2();
     } else {
-      setPasswordMismatch(true); // Contraseñas no coinciden, mostrar mensaje
+      setPasswordMismatch(true);
     }
   }
 
@@ -70,7 +62,7 @@ export default function PasswordReset({ params }) {
             <span className='mt-4 text-red-600 text-center font-semibold'>Las contraseñas no coinciden</span>
           )}
           {errorMessage && (
-            <span className='flex flex-wrap mt-4 text-red-600 text-center font-semibold'>Vuelva a solicitar un nuevo link</span>
+            <span className='flex flex-wrap mt-4 text-red-600 text-center font-semibold'>{errorMessage}</span>
           )}
         </form>
         :

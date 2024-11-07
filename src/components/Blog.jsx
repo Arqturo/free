@@ -12,9 +12,15 @@ export default function Blog() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await newestposts(page);
+        const response = await fetch(`/api/general/newestposts?page=${page}`);
 
-        const fetchedPosts = response.results.results.slice(0, 3);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        const fetchedPosts = data.results.results.slice(0, 3);
 
         if (Array.isArray(fetchedPosts)) {
           setPosts(fetchedPosts);

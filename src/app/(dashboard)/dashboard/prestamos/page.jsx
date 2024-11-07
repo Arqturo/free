@@ -1,16 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { getUserLoans } from '@/services/userServices'; // Adjust the import path as necessary
+
+import { handleUnauthorized } from '@/services/userServices'; 
 
 export default function Prestamos() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [prestamosData, setPrestamosData] = useState([]); // State to hold prestamos data
+  const [prestamosData, setPrestamosData] = useState([]); 
   const [token, setToken] = useState(null); // Use state to manage token
 
   useEffect(() => {
-    // Retrieve token from sessionStorage once the component mounts
     const storedToken = sessionStorage.getItem('token2');
     if (storedToken) {
       setToken(storedToken);
@@ -19,8 +19,29 @@ export default function Prestamos() {
     const fetchPrestamosData = async () => {
       if (storedToken) {
         try {
-          const data = await getUserLoans(storedToken); // Use getUserLoans instead of getFianza
-          setPrestamosData(data); // Store fetched data
+          const response = await fetch('/api/user/getUserLoans', {
+            method: 'GET',
+            headers: {
+              'Authorization': `Token ${storedToken}`,
+            },
+          });
+
+          if (response.status === 401) {
+            handleUnauthorized(); 
+            return;
+          }
+
+          if (!response.ok) {
+            throw new Error('Failed to fetch prestamos data');
+          }
+
+          const data = await response.json();
+
+          if (data.error) {
+            throw new Error(data.error);
+          }
+
+          setPrestamosData(data);
         } catch (err) {
           setError(err.message);
         } finally {
@@ -44,11 +65,11 @@ export default function Prestamos() {
   }
 
   return (
-    <div className='user_box'>
+    <div className="user_box">
       {prestamosData.length === 0 ? (
-        <div>No hay ningún estado de Préstamos</div> // Message when there are no records
+        <div>No hay ningún estado de Préstamos</div> 
       ) : (
-        <table role="table" className='user_box_table'>
+        <table role="table" className="user_box_table">
           <thead role="rowgroup">
             <tr role="row">
               <th role="columnheader">Serial</th>
@@ -63,13 +84,13 @@ export default function Prestamos() {
           <tbody role="rowgroup">
             {prestamosData.map((item) => (
               <tr role="row" key={item.SERIAL}>
-                <td data-label='Serial' role="cell">{item.SERIAL}</td>
-                <td data-label='Código' role="cell">{item.CODPTMO}</td>
-                <td data-label='Descripción' role="cell">{item.DESCRIP.trim()}</td>
-                <td data-label='Monto' role="cell">{item.MONTO}</td>
-                <td data-label='Saldo' role="cell">{item.SALDO}</td>
-                <td data-label='Tasa' role="cell">{item.TASA}</td>
-                <td data-label='Estado' role="cell">{item.STATUS}</td>
+                <td data-label="Serial" role="cell">{item.SERIAL}</td>
+                <td data-label="Código" role="cell">{item.CODPTMO}</td>
+                <td data-label="Descripción" role="cell">{item.DESCRIP.trim()}</td>
+                <td data-label="Monto" role="cell">{item.MONTO}</td>
+                <td data-label="Saldo" role="cell">{item.SALDO}</td>
+                <td data-label="Tasa" role="cell">{item.TASA}</td>
+                <td data-label="Estado" role="cell">{item.STATUS}</td>
               </tr>
             ))}
           </tbody>
