@@ -9,43 +9,41 @@ import { Label } from "@/components/ui/label"
 import { Lock, User } from "lucide-react"
 import Swal from 'sweetalert2'
 
-require('dotenv').config();
-const apiUrl = process.env.NEXT_PUBLIC_APP_API_URL;
- 
-
 export default function AdminLogin() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const router = useRouter();
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const response = await fetch(apiUrl+'/pagemaster/login/' , {
+    // Call the new API route for login
+    const response = await fetch('/api/admin/login', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         },
-        body: JSON.stringify({username,password})
-      })
-   
-      const data = await response.json()
-      
+        body: JSON.stringify({ username, password }),
+    });
 
-      if(data.error ){
-        Swal.fire({
-            title: 'Error!',
-            text: data.error,
-            icon: 'error',
-            confirmButtonText: 'Continuar'
-          })
-    }else{
-       await Swal.fire({
-            title: "Inicio exitoso!",
-            icon: "success"
-          });
-          sessionStorage.setItem('token', data.token);
-         router.push('/admin/dashboard');
+    const data = await response.json();
+
+    if (data.error) {
+      // If there's an error (invalid credentials), show the alert
+      Swal.fire({
+        title: 'Error!',
+        text: data.error,
+        icon: 'error',
+        confirmButtonText: 'Continuar'
+      });
+    } else {
+      // If login is successful, show success alert and save the token in sessionStorage
+      await Swal.fire({
+        title: "Inicio exitoso!",
+        icon: "success"
+      });
+      sessionStorage.setItem('token', data.token);
+      router.push('/admin/dashboard'); // Redirect to the admin dashboard
     }
   }
 

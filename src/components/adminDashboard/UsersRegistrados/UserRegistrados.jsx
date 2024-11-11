@@ -5,7 +5,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { listusers, editUsers } from "@/services/usersAdminServices"
 import {
   Dialog,
   DialogContent,
@@ -14,82 +13,165 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import { Edit2 } from "lucide-react"
+import { handleUnauthorized } from '@/services/usersAdminServices'
 
 export default function UserTable() {
   const [token, setToken] = useState("")
-  const [lista, setLista] = useState([])
+  const [lista, setLista] = useState([]) // List of users
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [editingUser, setEditingUser] = useState(null)
-  const [changes, setChanges] = useState({}); // Estado para almacenar cambios
-  const [currentPage, setCurrentPage] = useState(1); // Estado para la página actual
-  const [totalPages, setTotalPages] = useState(0); // Estado para el total de páginas
+  const [changes, setChanges] = useState({}) // State to store changes
+  const [currentPage, setCurrentPage] = useState(1) // State for current page
+  const [totalPages, setTotalPages] = useState(0) // State for total pages
+  const [cedulaSearch, setCedulaSearch] = useState("") // Search value for cedula
 
+  // Fetch the token and list users when the page loads or when the page changes
   useEffect(() => {
     const tok = sessionStorage.getItem("token")
     if (tok) {
       setToken(tok)
-      fetchUsers(tok, currentPage);
+      fetchUsers(tok, currentPage, cedulaSearch)
     }
-  }, [currentPage]); // Fetch users whenever currentPage changes
+  }, [currentPage, cedulaSearch]) // Fetch users whenever currentPage or cedulaSearch changes
 
-  const fetchUsers = async (tok, page) => {
-    const datos = await listusers(tok, page) // Pass the current page
-    setLista(datos.results)
-    setTotalPages(datos.total_pages) // Set total pages from response
+  // Function to fetch users from the API
+  const fetchUsers = async (tok, page, cedula) => {
+    try {
+      const queryParams = new URLSearchParams({ page: page.toString() })
+
+      // Only add cedula filter if it is not empty
+      if (cedula) {
+        queryParams.append("cedula", cedula)
+      }
+
+      const response = await fetch(`/api/admin/listUsers?${queryParams.toString()}`, {
+        headers: {
+          'Authorization': `Token ${tok}`, // Pass the token in the Authorization header
+        },
+      })
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          handleUnauthorized();
+        } else {
+          console.error("Failed to fetch users")
+          return
+        }
+      }
+
+      const data = await response.json()
+
+      setLista(data.results)
+      setTotalPages(data.total_pages) // Set total pages from response
+
+    } catch (error) {
+      console.error("Error fetching users:", error)
+    }
   }
 
+  // Function to handle opening the edit modal
   const handleEdit = (user) => {
     setEditingUser(user)
     setIsEditModalOpen(true)
-    setChanges({}); // Reiniciar cambios al abrir el modal
+    setChanges({}) // Reset changes when modal opens
   }
 
-  const handleSaveChanges = (e) => {
+  // Function to handle saving changes to a user
+  const handleSaveChanges = async (e) => {
     e.preventDefault()
 
     if (editingUser) {
-      const dataToUpdate = { id: editingUser.id, ...changes };
+      const dataToUpdate = { id: editingUser.id, ...changes }
 
-      editUsers(token, dataToUpdate); // Enviar solo los cambios
+      try {
+        const response = await fetch('/api/admin/editUsers', {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Token ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: editingUser.id, data: dataToUpdate }),
+        })
 
-      setLista(prevLista => 
-        prevLista.map(user => 
-          user.id === editingUser.id ? { ...user, ...changes } : user
+        if (!response.ok) {
+          if (response.status === 401) {
+            handleUnauthorized();
+          } else {
+            console.error("Failed to save changes")
+            return
+          }
+        }
+
+        const updatedUser = await response.json()
+
+        // Update the user in the list
+        setLista(prevLista =>
+          prevLista.map(user =>
+            user.id === editingUser.id ? { ...user, ...updatedUser } : user
+          )
         )
-      );
 
-      setIsEditModalOpen(false)
-      setEditingUser(null)
-      setChanges({}); // Reiniciar cambios después de guardar
+        setIsEditModalOpen(false)
+        setEditingUser(null)
+        setChanges({}) // Reset changes after saving
+      } catch (error) {
+        console.error("Error saving changes:", error)
+      }
     }
   }
 
+  // Function to handle changes to the input fields
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
 
     if (editingUser) {
       if (editingUser[name] !== value) {
         setChanges(prevChanges => ({
           ...prevChanges,
           [name]: value
-        }));
+        }))
       }
-      
+
       setEditingUser({
         ...editingUser,
         [name]: value
-      });
+      })
     }
   }
 
+  // Function to handle page changes
   const handlePageChange = (newPage) => {
-    if (newPage > 0 && newPage <= totalPages) {
-      setCurrentPage(newPage);
+    if (newPage !== currentPage && newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage)
     }
+  }
+
+  // Function to handle search input change
+  const handleCedulaSearchChange = (e) => {
+    setCedulaSearch(e.target.value)
+  }
+
+  // Function to handle search button click
+  const handleSearchClick = () => {
+    setCurrentPage(1) // Reset to the first page when searching
+    fetchUsers(token, 1, cedulaSearch) // Fetch users with cedula filter
   }
 
   return (
     <div className="container mx-auto p-10">
+      {/* Cedula Search Input */}
+      <div className="mb-4 flex items-center">
+        <Label htmlFor="cedula-search" className="mr-2">Buscar por Cédula</Label>
+        <Input
+          id="cedula-search"
+          value={cedulaSearch}
+          onChange={handleCedulaSearchChange}
+          className="mr-2"
+        />
+        <Button onClick={handleSearchClick}>Buscar</Button>
+      </div>
+
+      {/* Users Table */}
       <Table>
         <TableHeader>
           <TableRow>
@@ -103,10 +185,10 @@ export default function UserTable() {
         <TableBody>
           {lista?.map((user) => (
             <TableRow key={user.id}>
-              <TableCell className="font-medium">{user.cedula}</TableCell>
-              <TableCell>{user.full_name}</TableCell>
-              <TableCell>{user.email}</TableCell>
-              <TableCell>{user.phone_number}</TableCell>
+              <TableCell className="font-medium">{user.cedula || 'N/A'}</TableCell>
+              <TableCell>{user.full_name || 'N/A'}</TableCell>
+              <TableCell>{user.email || 'N/A'}</TableCell>
+              <TableCell>{user.phone_number || 'N/A'}</TableCell>
               <TableCell className="text-right">
                 <Button variant="ghost" size="icon" onClick={() => handleEdit(user)}>
                   <Edit2 className="h-4 w-4" />
@@ -118,12 +200,24 @@ export default function UserTable() {
         </TableBody>
       </Table>
 
+      {/* Pagination */}
       <div className="flex justify-between mt-4">
-        <Button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>Anterior</Button>
+        <Button
+          disabled={currentPage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+        >
+          Anterior
+        </Button>
         <span>Página {currentPage} de {totalPages}</span>
-        <Button disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)}>Siguiente</Button>
+        <Button
+          disabled={currentPage === totalPages}
+          onClick={() => handlePageChange(currentPage + 1)}
+        >
+          Siguiente
+        </Button>
       </div>
 
+      {/* Edit Modal */}
       <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>

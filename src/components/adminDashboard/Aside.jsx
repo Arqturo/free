@@ -11,7 +11,7 @@ export default function Aside() {
           { icon: FileText, label: "Usuarios registrados", link: "/admin/dashboard/users" }
         //  { icon: PlusCircle, label: "Administradores",link: "/admin/dashboard/admins" }
         ] },
-        { icon: Settings, label: "Configuración" , link: "/admin/dashboard/users" },
+        { icon: Settings, label: "Configuración" , link: "/admin/dashboard/admins" },
       ]
   return (
     <nav className="space-y-2 ">

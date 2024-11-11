@@ -2,7 +2,7 @@ require('dotenv').config();
 const apiUrl = process.env.NEXT_PUBLIC_APP_API_URL;
 
 
-const handleUnauthorized = () => {
+export const handleUnauthorized = () => {
 
     document.cookie.split(";").forEach((c) => {
         document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
@@ -149,4 +149,34 @@ export function addPost(token, data) {
     }
 
     return queryPost();
+}
+
+export function importUsers(token, file) {
+    async function queryImportUsers() {
+        const formData = new FormData();
+        formData.append('file', file);  
+
+        const response = await fetch(`${apiUrl}/pagemaster/import-users/`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Token ${token}`, 
+            },
+            body: formData,  
+        });
+
+        if (response.status === 401) {
+            handleUnauthorized();
+            return;
+        }
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.detail || "Failed to import users");
+        }
+
+        const res = await response.json();
+        return res; 
+    }
+
+    return queryImportUsers();
 }
