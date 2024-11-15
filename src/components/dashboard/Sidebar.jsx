@@ -52,7 +52,7 @@ export default function Sidebar() {
                                     Haberes
                                 </Link>
 
-                                <Link href="/dashboard/perfil" onClick={handleToggle} className="flex items-center px-4 py-2 
+                                <Link href="/dashboard/dividendos" onClick={handleToggle} className="flex items-center px-4 py-2 
                                  rounded-md text-white hover:bg-sky-400 text-[18px]">
                                     <CircleDivide className='mr-1 ' />
                                     Dividendos
@@ -65,7 +65,7 @@ export default function Sidebar() {
                                 </Link>
 
 
-                                <Link href="/dashboard/dividendos" onClick={handleToggle} className="flex items-center px-4 py-2 
+                                <Link href="/dashboard/perfil" onClick={handleToggle} className="flex items-center px-4 py-2 
                                  rounded-md text-white hover:bg-sky-400 text-[18px]">
                                     <GoGear className='mr-1 ' />
                                     Perfil
