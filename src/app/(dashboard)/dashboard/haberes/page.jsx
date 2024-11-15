@@ -61,6 +61,7 @@ export default function Haberes() {
         <table role="table" className="user_box_table">
           <thead role="rowgroup">
             <tr role="row">
+              <th role="columnheader">Sueldo</th>
               <th role="columnheader">Total Agravados</th>
               <th role="columnheader">Disponibilidad</th>
               <th role="columnheader">50%</th>
@@ -71,7 +72,10 @@ export default function Haberes() {
           <tbody role="rowgroup">
             {haberesData?.[0] && (
               <tr role="row">
-                <td data-label="Total Agravados" role="cell">
+                <td data-label="Sueldo" role="cell">
+                  {haberesData[0].Sueldo?.toFixed(2)}
+                </td>
+                <td data-label="Agravados" role="cell">
                   {haberesData[0].Total_Agravados?.toFixed(2)}
                 </td>
                 <td data-label="Disponibilidad" role="cell">
@@ -80,7 +84,7 @@ export default function Haberes() {
                 <td data-label="50%" role="cell">
                   {haberesData[0]["50_Porcentaje_Disponibilidad"]?.toFixed(2)}
                 </td>
-                <td data-label="Total Embargos" role="cell">
+                <td data-label="Embargos" role="cell">
                   {haberesData[0].Total_Embargos?.toFixed(2)}
                 </td>
                 <td data-label="Saldo Final" role="cell">

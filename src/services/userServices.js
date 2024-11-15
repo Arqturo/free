@@ -97,6 +97,50 @@ export function getFianza(token) {
     return queryFianza();
 }
 
+export function getDividendos(token) {
+    async function queryDividendos() {
+        const response = await fetch(`${apiUrl}/user/dividendos/`, {
+            method: "GET",
+            headers: {
+                'Authorization': `Token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.status === 401) {
+            return { error: 'Unauthorized' };
+        }
+
+        const data = await response.json();
+        return data;
+    }
+
+    return queryDividendos();
+}
+
+export function getSolicitudes(token) {
+    async function querySolicitudes() {
+        const response = await fetch(`${apiUrl}/user/solicitudes/`, {
+            method: "GET",
+            headers: {
+                'Authorization': `Token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.status === 401) {
+            return { error: 'Unauthorized' };
+        }
+
+        const data = await response.json();
+        return data;
+    }
+
+    return querySolicitudes();
+}
+
+
+
 export async function updateProfile(token, data) {
     try {
         const response = await fetch(`${apiUrl}/profile/edit/`, {

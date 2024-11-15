@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from "@/components/ui/button"
 import {Accordion,AccordionContent,AccordionItem,AccordionTrigger,} from "@/components/ui/accordion"  
-import { Edit, Home, LogOut, Menu, Settings, DollarSign, Users, NotebookPen , FileText, MinusCircle , PlusCircle} from "lucide-react"
+import { Edit, Home, LogOut, Menu, Settings, DollarSign, Users, NotebookPen , FileText, MinusCircle , PlusCircle,  CircleDivide, NotebookText} from "lucide-react"
 import Link from 'next/link'
 
 export default function Aside() {
@@ -11,6 +11,8 @@ export default function Aside() {
           { icon: DollarSign, label: "Fianzas", link: "/dashboard/fianzas" },
           { icon: MinusCircle, label: "Prestamos",link: "/dashboard/prestamos" },
           { icon: PlusCircle, label: "Haberes",link: "/dashboard/haberes" },
+          { icon: CircleDivide, label: "Dividendos",link: "/dashboard/dividendos" },
+          { icon: NotebookText, label: "Solicitudes",link: "/dashboard/solicitudes" },
         ] }
       ]
   return (

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React, { useState } from 'react'
 import { IoHomeOutline, IoSearchOutline } from "react-icons/io5";
 import { GoGear } from "react-icons/go";
-import { Edit, Home, LogOut, Menu, Settings, DollarSign, Users, NotebookPen , FileText, MinusCircle , PlusCircle} from "lucide-react"
+import { Edit, Home, LogOut, Menu, Settings, DollarSign, Users, NotebookPen , FileText, MinusCircle , PlusCircle, CircleDivide, NotebookText}  from "lucide-react"
 
 
 
@@ -52,12 +52,25 @@ export default function Sidebar() {
                                     Haberes
                                 </Link>
 
-
                                 <Link href="/dashboard/perfil" onClick={handleToggle} className="flex items-center px-4 py-2 
+                                 rounded-md text-white hover:bg-sky-400 text-[18px]">
+                                    <CircleDivide className='mr-1 ' />
+                                    Dividendos
+                                </Link>
+
+                                <Link href="/dashboard/solicitudes" onClick={handleToggle} className="flex items-center px-4 py-2 
+                                 rounded-md text-white hover:bg-sky-400 text-[18px]">
+                                    <NotebookText className='mr-1 ' />
+                                    Solicitudes
+                                </Link>
+
+
+                                <Link href="/dashboard/dividendos" onClick={handleToggle} className="flex items-center px-4 py-2 
                                  rounded-md text-white hover:bg-sky-400 text-[18px]">
                                     <GoGear className='mr-1 ' />
                                     Perfil
                                 </Link>
+
                                     
                             </nav>
                         </div>

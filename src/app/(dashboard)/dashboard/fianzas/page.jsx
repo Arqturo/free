@@ -78,8 +78,8 @@ export default function Fianzas() {
           <tbody role="rowgroup">
             {fianzaData.map((item) => (
               <tr role="row" key={item.CEDFIA}>
-                <td data-label='Cedula de Fiador' role="cell">{item.CEDFIA}</td>
-                <td data-label='Cedula Socio' role="cell">{item.CEDSOC}</td>
+                <td data-label='Ced Fiador' role="cell">{item.CEDFIA}</td>
+                <td data-label='Ced Socio' role="cell">{item.CEDSOC}</td>
                 <td data-label='Nombre Socio' role="cell">{item.NOMBRESOCIO}</td>
                 <td data-label='Saldo' role="cell">{item.SALDO}</td>
                 <td data-label='Descripcion' role="cell">{item.DESCRIP.trim()}</td>
