@@ -73,7 +73,7 @@ export default function Page() {
   }
 
   return (
-    <main className="flex w-full justify-center font-poppins items-center bg-gradient-to-r from-slate-200 to-gray-300">
+    <main className="flex h-screen w-full justify-center font-poppins items-center bg-gradient-to-r from-slate-200 to-gray-300">
       <section id="back-div" className="lg:w-2/4 sm:w-4/5 mt-5 rounded-xl border-4 border-slate-300">
         <section className="border-none rounded-xl bg-white shadow-lg p-4">
           <h1 className="pt-4 pb-6 font-bold dark:text-gray-400 text-5xl text-center cursor-default">

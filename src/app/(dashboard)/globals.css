@@ -84,6 +84,7 @@
 .user_box {
 
   width: 90%;
+  min-height: 100%;
 
   .user_box_table {
     width: 100% !important;
@@ -111,13 +112,8 @@
 			left: -9999px;
 		}
 
-    tr {
-      margin: 0 0 1rem 0;
-    }
+
       
-    tr:nth-child(odd) {
-      background: #ccc;
-    }
     
 		td {
 			/* Behave  like a "row" */
@@ -142,6 +138,108 @@
         content: attr(data-label);
     }
 	}
+
+
+
+table {
+  margin: auto;
+  min-width: 300px;
+  max-width: 100%;
+  border-collapse: collapse;
 }
 
+table thead tr:first-child {
+  border-top: none;
+  background: #428bca;
+  color: #fff;
+}
+
+table tr {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  background-color: #f5f9fc;
+}
+
+table th {
+  display: none;
+}
+
+table td {
+  display: block;
+}
+
+table td:first-child {
+  margin-top: .5em;
+}
+
+table td:last-child {
+  margin-bottom: .5em;
+}
+
+table td:before {
+  font-weight: bold;
+  width: 120px;
+  display: inline-block;
+  color: #000;
+  position: relative;
+}
+
+table th,
+table td {
+  text-align: left;
+}
+
+table {
+  color: #333;
+  border-radius: .4em;
+  overflow: hidden;
+}
+
+table tr {
+  border-color: #bfbfbf;
+}
+
+table th,
+table td {
+  padding: .5em 1em;
+}
+@media screen and (max-width: 601px) {
+  table tr:nth-child(2) {
+    border-top: none;
+  }
+}
+@media screen and (min-width: 600px) {
+  table tr:hover:not(:first-child) {
+    background-color: #d8e7f3;
+  }
+  table td:before {
+    display: none;
+  }
+  table th,
+  table td {
+    display: table-cell;
+    padding: .25em .5em;
+  }
+  table th:first-child,
+  table td:first-child {
+    padding-left: 0;
+  }
+  table th:last-child,
+  table td:last-child {
+    padding-right: 0;
+  }
+  table th,
+  table td {
+    padding: 1em !important;
+  }
+}
+}
+
+
+}
+
+
+.customsidebar {
+  border-color: black !important;
+  color: white !important;
 }

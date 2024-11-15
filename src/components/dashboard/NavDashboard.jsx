@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react"; // Ensure you're importing the icon you want to use
 import Aside from "./Aside"; // Assuming this is your sidebar component
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"; // Adjust based on your UI library
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheettwo"; // Adjust based on your UI library
 
 export default function NavDashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State for sidebar

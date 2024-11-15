@@ -11,8 +11,7 @@ export default function Aside() {
           { icon: DollarSign, label: "Fianzas", link: "/dashboard/fianzas" },
           { icon: MinusCircle, label: "Prestamos",link: "/dashboard/prestamos" },
           { icon: PlusCircle, label: "Haberes",link: "/dashboard/haberes" },
-        ] },
-        { icon: Settings, label: "Configuración" , link: "/admin/dashboard/users" },
+        ] }
       ]
   return (
     <nav className="space-y-2 ">
@@ -20,15 +19,16 @@ export default function Aside() {
             item.subItems ? (
                 <Accordion type="single" collapsible key={index} className="border-none">
                     <AccordionItem value={item.label} className="border-none">
-                        <AccordionTrigger className="flex items-center py-2 px-4 w-full text-left from-sky-700 to-blue-500  hover:bg-gray-200 hover:no-underline">      
+                    <Link href={item.link ? item.link : "#"} className='flex'>
 
-                           <Link href={item.link ? item.link : "#"} className='flex'>
+                        <AccordionTrigger className="flex items-center py-2 px-4 w-full text-left from-sky-700 to-blue-500 hover:no-underline">      
                             <div className="flex items-center">
                                                 <item.icon className="mr-2 h-4 w-4" />
                                                 <span>{item.label}</span> 
                             </div>
-                            </Link>
                         </AccordionTrigger>
+                        </Link>
+
 
                        <AccordionContent>
                             <div className="pl-6 space-y-1">

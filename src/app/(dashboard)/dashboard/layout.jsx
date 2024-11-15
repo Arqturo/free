@@ -5,14 +5,14 @@ export default function DashboardLayout({ children  }) {
 
 
   return (
-        <div className="flex flex-col h-screen bg-gray-100 ">
+        <div className="flex flex-col h-full min-h-svh bg-gray-100 ">
             {/* <!-- Navbar content --> */}
             <NavDashboard/>                                 
 
             {/* <!-- sidebar --> */}                
               <Sidebar/>  
 
-            <section className="flex md:ml-64 h-screen justify-center " >
+            <section className="flex md:ml-64 h-full min-h-svh	 justify-center " >
                 {children}
             </section>
             

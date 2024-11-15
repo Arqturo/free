@@ -19,15 +19,17 @@ export default function Aside() {
             item.subItems ? (
                 <Accordion type="single" collapsible key={index} className="border-none">
                     <AccordionItem value={item.label} className="border-none">
+                    <Link href={item.link ? item.link : "/admin/dashboard"} className='flex'>
+
                         <AccordionTrigger className="flex items-center py-2 px-4 w-full text-left hover:bg-gray-200 hover:no-underline">      
 
-                           <Link href={item.link ? item.link : "/admin/dashboard"} className='flex'>
                             <div className="flex items-center">
                                                 <item.icon className="mr-2 h-4 w-4" />
                                                 <span>{item.label}</span> 
                             </div>
-                            </Link>
                         </AccordionTrigger>
+                        </Link>
+
 
                        <AccordionContent>
                             <div className="pl-6 space-y-1">
