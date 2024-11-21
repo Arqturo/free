@@ -250,7 +250,14 @@ table td {
   .customsidebar {
     z-index: 999999 !important;
    }
+
+   .customnav {
+    z-index: 99999 !important;
+   }
 }
+
+
+
 
 .caproluz_red {
   background-color: #BF0005;
