@@ -13,7 +13,8 @@ export default function Aside() {
           { icon: PlusCircle, label: "Haberes",link: "/dashboard/haberes" },
           { icon: CircleDivide, label: "Dividendos",link: "/dashboard/dividendos" },
           { icon: NotebookText, label: "Solicitudes",link: "/dashboard/solicitudes" },
-        ] }
+        ] },
+        { icon: Settings, label: "Perfil" , link: "/dashboard/perfil"}
       ]
   return (
     <nav className="space-y-2 ">

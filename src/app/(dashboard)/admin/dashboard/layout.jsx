@@ -1,3 +1,6 @@
+"use client"
+
+
 import Navbar from "@/components/adminDashboard/Navbar"
 import Aside from "@/components/adminDashboard/Aside";
 

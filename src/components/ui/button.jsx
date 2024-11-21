@@ -34,15 +34,29 @@ const buttonVariants = cva(
   }
 )
 
-const Button = React.forwardRef(({ className, variant, size, asChild = false, ...props }, ref) => {
-  const Comp = asChild ? Slot : "button"
+const Button = React.forwardRef(({ className, variant, size, asChild = false, onClick, ...props }, ref) => {
+  const handleClick = (e) => {
+    const closeButton = document.getElementById("sidebar-close-button");
+    if (closeButton) {
+      closeButton.click();  
+    }
+
+    if (onClick) {
+      onClick(e);
+    }
+  };
+
+  const Comp = asChild ? Slot : "button";
+
   return (
-    (<Comp
+    <Comp
       className={cn(buttonVariants({ variant, size, className }))}
       ref={ref}
-      {...props} />)
+      onClick={handleClick}
+      {...props}
+    />
   );
-})
+});
 Button.displayName = "Button"
 
 export { Button, buttonVariants }

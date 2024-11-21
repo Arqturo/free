@@ -177,6 +177,7 @@ export default function UserTable() {
           <TableRow>
             <TableHead>Cédula</TableHead>
             <TableHead>Nombre Completo</TableHead>
+            <TableHead>Fecha de Nacimiento</TableHead> {/* New column */}
             <TableHead>Email</TableHead>
             <TableHead>Teléfono</TableHead>
             <TableHead className="text-right">Acciones</TableHead>
@@ -187,6 +188,7 @@ export default function UserTable() {
             <TableRow key={user.id}>
               <TableCell className="font-medium">{user.cedula || 'N/A'}</TableCell>
               <TableCell>{user.full_name || 'N/A'}</TableCell>
+              <TableCell>{user.birth_date || 'N/A'}</TableCell> {/* New cell */}
               <TableCell>{user.email || 'N/A'}</TableCell>
               <TableCell>{user.phone_number || 'N/A'}</TableCell>
               <TableCell className="text-right">
@@ -239,11 +241,24 @@ export default function UserTable() {
 
               {/* Nombre Completo */}
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="full_name" className="text-right">Nombre</Label>
+                <Label htmlFor="full_name" className="text-right">Nombre Completo</Label>
                 <Input
                   id="full_name"
                   name="full_name"
                   value={editingUser?.full_name || ''}
+                  onChange={handleInputChange}
+                  className="col-span-3"
+                />
+              </div>
+
+              {/* Fecha de Nacimiento */}
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="birth_date" className="text-right">Fecha de Nacimiento</Label>
+                <Input
+                  id="birth_date"
+                  name="birth_date"
+                  type="date"
+                  value={editingUser?.birth_date || ''}
                   onChange={handleInputChange}
                   className="col-span-3"
                 />
@@ -269,6 +284,18 @@ export default function UserTable() {
                   id="phone_number"
                   name="phone_number"
                   value={editingUser?.phone_number || ''}
+                  onChange={handleInputChange}
+                  className="col-span-3"
+                />
+              </div>
+
+              {/* Room Address (Only in Modal) */}
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="room_address" className="text-right">Dirección de Habitación</Label>
+                <Input
+                  id="room_address"
+                  name="room_address"
+                  value={editingUser?.room_address || ''}
                   onChange={handleInputChange}
                   className="col-span-3"
                 />
