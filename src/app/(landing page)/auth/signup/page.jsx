@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import ModalError from './ModalError';
 import ModalSucces from "./ModalSucces"
 
-
 export default function Page() {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -55,13 +54,17 @@ export default function Page() {
     const Rpassword = document.getElementById('Rpassword').value;
     const prefix_phone = document.getElementById('prefix').value;
     const phone = document.getElementById('phone').value;
+    const roomAddress = document.getElementById('room_address').value;
+    const birthDate = document.getElementById('birth_date').value; 
 
     const dataToSend = {
       cedula: cedula,
       full_name: fullname,
       email: email,
       password: password,
-      phone_number: prefix_phone.toString() + phone.toString()
+      phone_number: prefix_phone.toString() + phone.toString(),
+      room_address: roomAddress, 
+      birth_date: birthDate 
     };
 
     if (password === Rpassword) {
@@ -140,6 +143,29 @@ export default function Page() {
                 type="password"
                 placeholder="********"
                 minLength={8}
+                required
+              />
+            </article>
+
+            <article>
+              <label htmlFor="room_address" className="mb-2 dark:text-gray-400 text-lg">Dirección de habitación:</label>
+              <input id="room_address"
+                className="border p-3 shadow-md dark:bg-indigo-700 dark:text-gray-300 
+                dark:border-gray-700 placeholder:text-base 
+                ease-in-out duration-300 border-gray-300 rounded-lg w-full"
+                type="text"
+                placeholder="Dirección de habitación"
+              />
+            </article>
+
+
+            <article>
+              <label htmlFor="birth_date" className="mb-2 dark:text-gray-400 text-lg">Fecha de Nacimiento:</label>
+              <input id="birth_date"
+                className="border p-3 shadow-md dark:bg-indigo-700 dark:text-gray-300 
+                dark:border-gray-700 placeholder:text-base 
+                ease-in-out duration-300 border-gray-300 rounded-lg w-full"
+                type="date"
                 required
               />
             </article>

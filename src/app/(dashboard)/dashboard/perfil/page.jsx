@@ -8,11 +8,16 @@ import { handleUnauthorized } from '@/services/userServices'; // Import the func
 export default function Perfil() {
   const [loading, setLoading] = useState(true);
   const [profileData, setProfileData] = useState(null);
-  const [formData, setFormData] = useState({ email: '', phone_number: '', full_name: '' });
+  const [formData, setFormData] = useState({
+    email: '',
+    phone_number: '',
+    full_name: '',
+    room_address: '',
+    birth_date: '',
+  });
   const [token, setToken] = useState(null);
 
   useEffect(() => {
-    // Retrieve token from sessionStorage
     const storedToken = sessionStorage.getItem('token2');
     if (storedToken) {
       setToken(storedToken);
@@ -21,7 +26,6 @@ export default function Perfil() {
     const fetchProfileData = async () => {
       if (storedToken) {
         try {
-          // Call the API route /api/user/getProfile to fetch profile data
           const response = await fetch('/api/user/getProfile', {
             method: 'GET',
             headers: {
@@ -33,12 +37,13 @@ export default function Perfil() {
             const data = await response.json();
             setProfileData(data);
             setFormData({
-              email: data.email,
-              phone_number: data.phone_number,
-              full_name: data.full_name,
+              email: data.email || '',
+              phone_number: data.phone_number || '',
+              full_name: data.full_name || '',
+              room_address: data.room_address || '',  
+              birth_date: data.birth_date || '',    
             });
           } else if (response.status === 401) {
-            // If a 401 error occurs, call handleUnauthorized function
             handleUnauthorized();
           } else {
             const error = await response.json();
@@ -68,7 +73,7 @@ export default function Perfil() {
     };
 
     fetchProfileData();
-  }, []); // Empty dependency array ensures this runs once when the component mounts
+  }, []); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -87,14 +92,13 @@ export default function Perfil() {
     }
 
     try {
-      // Call the API route /api/user/updateProfile to update the profile
       const response = await fetch('/api/user/updateProfile', {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData),  
       });
 
       if (response.ok) {
@@ -106,7 +110,6 @@ export default function Perfil() {
         });
         setProfileData({ ...profileData, ...formData });
       } else if (response.status === 401) {
-        // If a 401 error occurs, call handleUnauthorized function
         handleUnauthorized();
       } else {
         const error = await response.json();
@@ -162,6 +165,31 @@ export default function Perfil() {
             required
           />
         </div>
+
+        <div className="form-group">
+          <label>Dirección de habitación:</label>
+          <input
+            className="form-input"
+            type="text"
+            name="room_address"
+            value={formData.room_address}
+            onChange={handleChange}
+            placeholder="Ingrese su dirección"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Fecha de Nacimiento:</label>
+          <input
+            className="form-input"
+            type="date"
+            name="birth_date"
+            value={formData.birth_date}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
         <button className="form-button" type="submit">Actualizar Perfil</button>
       </form>
       {profileData && (
@@ -171,6 +199,8 @@ export default function Perfil() {
           <p><strong>Email:</strong> {profileData.email}</p>
           <p><strong>Número de Teléfono:</strong> {profileData.phone_number}</p>
           <p><strong>Nombre Completo:</strong> {profileData.full_name}</p>
+          <p><strong>Dirección de habitación:</strong> {profileData.room_address || 'No proporcionada'}</p>
+          <p><strong>Fecha de Nacimiento:</strong> {profileData.birth_date || 'No proporcionada'}</p>
         </div>
       )}
     </div>

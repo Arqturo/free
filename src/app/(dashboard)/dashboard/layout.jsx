@@ -12,7 +12,7 @@ export default function DashboardLayout({ children  }) {
             {/* <!-- sidebar --> */}                
               <Sidebar/>  
 
-            <section className="flex md:ml-64 h-full min-h-svh	 justify-center " >
+            <section className="flex md:ml-64 h-full justify-center md:relative top-[10vh]" >
                 {children}
             </section>
             
