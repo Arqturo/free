@@ -56,7 +56,7 @@ export default function Solicitudes() {
   return (
     <div className="user_box">
       {!solicitudesData || solicitudesData.length === 0 ? (
-        <div>No hay ninguna solicitud</div>
+        <div>No hay solicitudes pendientes</div>
       ) : (
         <table role="table" className="user_box_table">
           <thead role="rowgroup">

@@ -150,7 +150,7 @@ table {
 
 table thead tr:first-child {
   border-top: none;
-  background: #428bca;
+  background: #BF0005;
   color: #fff;
 }
 
@@ -210,7 +210,7 @@ table td {
 }
 @media screen and (min-width: 600px) {
   table tr:hover:not(:first-child) {
-    background-color: #d8e7f3;
+    background-color: #f8868ace;
   }
   table td:before {
     display: none;
@@ -242,4 +242,17 @@ table td {
 .customsidebar {
   border-color: black !important;
   color: white !important;
+}
+
+.caproluz_red {
+  background-color: #BF0005;
+}
+
+.caproluz_active {
+  background-color:  rgba(0,0,0,.8);
+}
+
+.caproluz_option:hover {
+  background-color:  rgba(0,0,0,.8);
+
 }

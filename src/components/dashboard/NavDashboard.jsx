@@ -9,7 +9,7 @@ export default function NavDashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State for sidebar
 
   return (
-    <div className="flex items-center justify-between rounded-sm w-full h-16 bg-gradient-to-b from-sky-700 to-blue-500 px-6">
+    <div className="flex items-center justify-between rounded-sm w-full h-16 caproluz_red px-6">
       {/* Sidebar Trigger */}
       <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
         <SheetTrigger asChild>

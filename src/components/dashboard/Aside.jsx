@@ -23,7 +23,7 @@ export default function Aside() {
                     <AccordionItem value={item.label} className="border-none">
                     <Link href={item.link ? item.link : "#"} className='flex'>
 
-                        <AccordionTrigger className="flex items-center py-2 px-4 w-full text-left from-sky-700 to-blue-500 hover:no-underline">      
+                        <AccordionTrigger className="flex items-center py-2 px-4 w-full text-left caproluz_red hover:no-underline">      
                             <div className="flex items-center">
                                                 <item.icon className="mr-2 h-4 w-4" />
                                                 <span>{item.label}</span> 
