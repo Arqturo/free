@@ -77,8 +77,8 @@ export default function Prestamos() {
               <th role="columnheader">Descripción</th>
               <th role="columnheader">Monto</th>
               <th role="columnheader">Saldo</th>
-              <th role="columnheader">Tasa</th>
-              <th role="columnheader">Estado</th>
+              <th role="columnheader">Cuota Mensual</th>
+
             </tr>
           </thead>
           <tbody role="rowgroup">
@@ -89,8 +89,7 @@ export default function Prestamos() {
                 <td data-label="Descripción" role="cell">{item.DESCRIP.trim()}</td>
                 <td data-label="Monto" role="cell">{item.MONTO}</td>
                 <td data-label="Saldo" role="cell">{item.SALDO}</td>
-                <td data-label="Tasa" role="cell">{item.TASA}</td>
-                <td data-label="Estado" role="cell">{item.STATUS}</td>
+                <td data-label="Cuota Mensual" role="cell">{item.CUOTA1}</td>
               </tr>
             ))}
           </tbody>
