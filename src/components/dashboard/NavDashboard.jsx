@@ -1,16 +1,58 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react"; // Ensure you're importing the icon you want to use
-import Aside from "./Aside"; // Assuming this is your sidebar component
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheettwo"; // Adjust based on your UI library
+import { Menu } from "lucide-react";
+import Aside from "./Aside";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheettwo";
 
 export default function NavDashboard() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State for sidebar
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [firstName, setFirstName] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('token2');
+    console.log('JWT Token:', token);
+
+    if (token) {
+      fetch('/api/user/getProfile', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Profile Data:', data);
+          if (data && data.full_name) {
+            const fullName = data.full_name;
+            setFirstName(fullName.split(" ")[0]);
+          }
+        })
+        .catch(err => {
+          console.error('Error fetching profile:', err);
+          setError('Error fetching profile');
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setError('No token found');
+      setLoading(false);
+    }
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="flex items-center justify-between rounded-sm w-full h-16 caproluz_red px-6 fixed z-9999 sm:z-auto customnav">
-      {/* Sidebar Trigger */}
       <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
         <SheetTrigger asChild>
           <Button variant="ghost" className="mr-2 md:hidden">
@@ -19,12 +61,14 @@ export default function NavDashboard() {
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="w-[240px] sm:w-[300px]">
-          <Aside /> {/* Your sidebar component */}
+          <Aside />
         </SheetContent>
       </Sheet>
+      
+      
 
-      <div className="flex flex-col pr-3 text-center">
-        <h3 className="text-white">Bienvenido</h3>
+      <div className="flex flex-col pr-3 text-center user__name">
+        <h3 className="text-white">Bienvenido/a, {firstName}</h3>
       </div>
 
       <div className="group relative inline-block items-center cursor-pointer">
