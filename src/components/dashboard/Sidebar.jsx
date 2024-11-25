@@ -63,7 +63,7 @@ export default function Sidebar() {
         setIsActiveseven(true);
       };
   return (
-    <section className='absolute '>
+    <section className='absolute sidebar_container'>
                     <div className="hidden md:flex flex-col w-64 border-solid rounded h-screen
                      caproluz_red ">
                         
