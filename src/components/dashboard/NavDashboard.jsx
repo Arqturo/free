@@ -4,12 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import Aside from "./Aside";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheettwo";
+import { useRouter } from "next/navigation";
 
 export default function NavDashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     const token = sessionStorage.getItem('token2');
@@ -43,6 +45,13 @@ export default function NavDashboard() {
     }
   }, []);
 
+  const handleLogout = () => {
+    if (typeof sessionStorage !== "undefined") {
+      sessionStorage.setItem('token2', 'none');
+    }
+    router.push('/');
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -64,8 +73,6 @@ export default function NavDashboard() {
           <Aside />
         </SheetContent>
       </Sheet>
-      
-      
 
       <div className="flex flex-col pr-3 text-center user__name">
         <h3 className="text-white">Bienvenido/a, {firstName}</h3>
@@ -79,7 +86,7 @@ export default function NavDashboard() {
           <a href="/dashboard/perfil" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md" role="menuitem" tabIndex={-1}>
             Perfil
           </a>
-          <a href="/" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md" role="menuitem" tabIndex={-1}>
+          <a href="#" onClick={handleLogout} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md" role="menuitem" tabIndex={-1}>
             Cerrar Sesión
           </a>
         </div>

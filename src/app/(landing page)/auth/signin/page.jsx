@@ -8,7 +8,6 @@ import Swal from 'sweetalert2';
 function Page() {
   const router = useRouter();
   const [status2, setStatus2] = useState(false);
-  sessionStorage.setItem('token2', 'none'); 
 
   async function onsubmit(e) {
     e.preventDefault();
