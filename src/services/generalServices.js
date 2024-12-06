@@ -1,5 +1,7 @@
 require('dotenv').config();
 const apiUrl = process.env.NEXT_PUBLIC_APP_API_URL;
+const domain = process.env.NEXT_PUBLIC_APP_DOMAIN_URL;
+
 
 export function listposts(page) {
     async function queryposts() {          
@@ -95,6 +97,13 @@ export function fileToBase64(file) {
   
     return new File([u8arr], fileName, { type: mime });
   }
+
+  export const ExternalRedirectButton = (direction) => {
+      if (typeof window !== 'undefined') {
+        // Check if `window` is defined (i.e., we're on the client side)
+        window.location.href = `${domain}${direction}`;
+      }
+  };
 
  export function removeHtmlTags(text) {
     return text.replace(/<[^>]*>/g, ''); // Removes anything that looks like an HTML tag

@@ -12,6 +12,8 @@ import { useRouter } from 'next/navigation'
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Edit, Home, LogOut, Menu, Settings, Users, NotebookPen , FileText, PlusCircle} from "lucide-react"
 import Aside from "./Aside";
+import { ExternalRedirectButton } from "@/services/generalServices"
+
 
 export default function Component() {
 
@@ -23,7 +25,7 @@ export default function Component() {
 
   function cerrar() {
     sessionStorage.removeItem('token');
-    router.push('/admin');
+    ExternalRedirectButton('/admin');
     }
 
 
