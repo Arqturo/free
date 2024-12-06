@@ -1,7 +1,6 @@
 "use client"
 import React,{useState} from 'react'
 import { useRouter } from 'next/navigation'
-import { ExternalRedirectButton } from "@/services/generalServices"
 
 export default function ModalError() {
 
@@ -11,7 +10,7 @@ export default function ModalError() {
   
   function setchange() {
     setStatus(false)
-    ExternalRedirectButton('/auth/signin');
+    router.push('/auth/signin');
     
   }
 

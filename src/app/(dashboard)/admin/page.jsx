@@ -8,7 +8,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from "@/components/ui/label"
 import { Lock, User } from "lucide-react"
 import Swal from 'sweetalert2'
-import { ExternalRedirectButton } from "@/services/generalServices"
 
 export default function AdminLogin() {
   const [username, setUsername] = useState("")
@@ -44,7 +43,7 @@ export default function AdminLogin() {
         icon: "success"
       });
       sessionStorage.setItem('token', data.token);
-      ExternalRedirectButton('/admin/dashboard'); // Redirect to the admin dashboard
+      router.push('/admin/dashboard'); // Redirect to the admin dashboard
     }
   }
 

@@ -5,8 +5,6 @@ import { Menu } from "lucide-react";
 import Aside from "./Aside";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheettwo";
 import { useRouter } from "next/navigation";
-import { ExternalRedirectButton } from "@/services/generalServices"
-
 
 export default function NavDashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -51,7 +49,7 @@ export default function NavDashboard() {
     if (typeof sessionStorage !== "undefined") {
       sessionStorage.setItem('token2', 'none');
     }
-    ExternalRedirectButton('/');
+    router.push('/');
   };
 
   if (loading) {
