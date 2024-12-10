@@ -3,9 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import ModalPassword from "./ModalPassword";
-import Swal from 'sweetalert2';
-import { ExternalRedirectButton } from "@/services/generalServices"
-
+import Swal from 'sweetalert2';  
 
 function Page() {
   const router = useRouter();
@@ -42,7 +40,7 @@ function Page() {
       });
     } else {
       sessionStorage.setItem('token2', data.token); 
-      ExternalRedirectButton('/dashboard');
+      router.push('/dashboard');
     }
   }
 
