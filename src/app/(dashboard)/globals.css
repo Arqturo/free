@@ -132,6 +132,7 @@
 			width: 45%;
 			padding-right: 10px;
 			white-space: nowrap;
+      left: -2px;
 		}
 
     td:before {
